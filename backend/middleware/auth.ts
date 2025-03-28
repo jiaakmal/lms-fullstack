@@ -1,6 +1,5 @@
 require("dotenv").config();
 import { Response, Request , NextFunction } from "express";
-
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler"
 import jwt , { JwtPayload } from "jsonwebtoken";
@@ -33,10 +32,15 @@ export const isAuthenticated = catchAsyncError(async (req:Request, res:Response 
 
 // validate user role
 export const authorizeRoles = (...roles: string[]) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-      if (!roles.includes(req.user.role) || "") {
-        return next(new ErrorHandler(`Role: ${req.user.role} is not allowed to access this resource`, 403));
+  return (req: Request, res: Response, next: NextFunction) => {
+      const user = req.user as IUser;
+      console.log("User Role (type and value):", typeof user.role, user.role); // Log type and value
+      console.log("Allowed Roles (type and value):", typeof roles, roles); // Log type and value
+
+      if (!roles.includes(user.role)) {
+          console.error(`Role mismatch: User role "${user.role}" is not in allowed roles ${JSON.stringify(roles)}`);
+          return next(new ErrorHandler(`Role: ${user.role} is not allowed to access this resource`, 403));
       }
       next();
-    };
   };
+};

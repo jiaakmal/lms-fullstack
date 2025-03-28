@@ -49,13 +49,21 @@ const userSchema: Schema = new Schema(
     role: {
       type: String,
       required: true,
-      default: "user",
+      default: "user"
+     
     },
     isVerified: {
       type: Boolean,
       default: false,
     },
-    courses: [{ courseId: String }],
+    courses: {
+      type: [
+        {
+          courseId: String,
+        },
+      ],
+      default: [],
+    },
 },
   {
     timestamps: true,

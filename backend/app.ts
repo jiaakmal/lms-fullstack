@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route";
+import courseRouter from "./routes/course.route";
+import notificationRouter from "./routes/notification.route";
+import orderRouter from "./routes/order.route";
 
 
 
@@ -17,6 +20,10 @@ app.use(cookieParser());
 
 //routes
 app.use("/api/v1", userRouter);
+app.use("/api/v1", courseRouter);
+app.use("/api/v1", orderRouter);
+app.use("/api/v1", notificationRouter);
+
 
 //testing api 
 app.get("/test", (req, res) => {

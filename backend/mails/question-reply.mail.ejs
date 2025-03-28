@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning With Jawaria - Question Reply Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+            color: #333333;
+        }
+        .email-body p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .email-body h2 {
+            color: #007bff;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .email-footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #666666;
+        }
+        .email-footer p {
+            margin: 5px 0;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>Learning With Jawaria</h1>
+        </div>
+        <div class="email-body">
+            <p>Dear <%= name %>,</p>
+            <p>Someone has replied to your question in the course titled "<strong><%= title %></strong>".</p>
+            <p>Visit the course to view the reply and continue the discussion.</p>
+            <p>Thank you for being an active part of our learning community!</p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; <%= new Date().getFullYear() %> Learning With Jawaria. All rights reserved.</p>
+            <p><a href="<%= process.env.ORIGIN %>">Visit our website</a></p>
+        </div>
+    </div>
+</body>
+</html>
