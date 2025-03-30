@@ -131,7 +131,7 @@ export const editLayout = catchAsyncError(async (req: Request, res: Response, ne
 
 export const getLayoutByType = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {type} = req.body,
+        const {type} = req.body;
         const layout = await LayoutModel.findOne({type});
         if(!layout){
             return next(new ErrorHandler("Layout not found", 404));
