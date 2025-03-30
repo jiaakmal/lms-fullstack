@@ -19,3 +19,13 @@ export const newOrder = catchAsyncError(async (data: any,res:Response, next: Nex
         return next(new ErrorHandler("Failed to create order", 500));
     }
 })
+
+// get all orders for admin
+export const getAllOrdersService = catchAsyncError(async (res: Response) => {
+    const orders = await OrderModel.find().sort({ createdAt: -1 });
+    res.status(200).json({
+        success: true,
+        orders,
+        message: "Orders fetched successfully",
+    });
+});

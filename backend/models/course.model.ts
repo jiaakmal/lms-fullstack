@@ -89,6 +89,9 @@ const courseSchema = new Schema<ICourse>({
   courseData: [courseDataSchema],
   rating: { type: Number, default: 0 },
   purchased: { type: Number, default: 0 }, // Initialize purchased with a default value
+},
+{
+  timestamps: true
 });
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
