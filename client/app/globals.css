@@ -13,6 +13,12 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+/* remove cursor arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -46,4 +52,25 @@ body {
   83.33% {
     opacity: 0.4;
   }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
 }

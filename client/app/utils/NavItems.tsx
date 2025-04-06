@@ -48,7 +48,14 @@ function NavItems({ activeItem, isMobile }: Props) {
         ))}
       </div>
       {isMobile && (
-        <div className="md:hidden mt-5 ">
+        <div className="md:hidden mt-10 flex flex-col items-start space-y-4">
+          {/* <div className="w-full  text-center py-5">
+            <Link href="/">
+              <span className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}>
+                E-Learning
+              </span>
+            </Link>
+          </div> */}
           {navItemData.map((item, index) => (
             <Link href={item.url} key={index} passHref>
               <span
@@ -57,7 +64,7 @@ function NavItems({ activeItem, isMobile }: Props) {
                           activeItem === index
                             ? "dark:text-[#37a39a] text-[crimson]"
                             : "dark:text-white text-black"
-                        } text-[18px px-6 font-Poppins font-[400]`}
+                        }block  text-[18px] py-5 px-6 font-Poppins font-[400]`}
               >
                 {item.name}
               </span>
@@ -68,5 +75,6 @@ function NavItems({ activeItem, isMobile }: Props) {
     </>
   );
 }
+
 
 export default NavItems;
