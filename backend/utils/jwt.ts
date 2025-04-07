@@ -1,5 +1,6 @@
 // Load environment variables from the .env file
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 // Importing necessary modules
 import express, { Response } from "express"; // Import Express and the Response type for type safety

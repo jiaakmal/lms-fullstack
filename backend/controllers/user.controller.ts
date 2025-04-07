@@ -45,6 +45,7 @@ interface IRegistrationBody {
 export const registerUser = catchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log("Request Body:", req.body); // Debugging
             // Extracting name, email, and password from the request body
             const { name, email, password } = req.body;
 
@@ -52,7 +53,11 @@ export const registerUser = catchAsyncError(
             const isEmailTaken = await userModel.findOne({ email });
             if (isEmailTaken) {
                 // If email exists, pass an error to the next middleware
-                return next(new ErrorHandler("Email already exists", 400));
+                // return next(new ErrorHandler("Email already exists", 400));
+                return res.status(400).json({
+                    success: false,
+                    message: "Email already exists",
+                  });
             }
 
             // Creating a user object with the provided data
@@ -126,43 +131,102 @@ interface IActivationRequest {
     activationCode: string;
 }
 
+// export const activateAccount = catchAsyncError(
+//     async (req: Request, res: Response, next: NextFunction) => {
+//         try {
+//             console.log("Activation Request Body:", req.body); // Debugging
+//             // Extracting activation token and activation code from the request body
+//             const { activationToken, activationCode }: IActivationRequest = req.body;
+//             // Verifying the activation token
+//             const newUser: { user: IUser; activationCode: string } = jwt.verify(
+//                 activationToken,
+//                 process.env.ACTIVATION_TOKEN_SECRET as string
+//             ) as { user: IUser; activationCode: string };
+//             console.log("Decoded Token:", newUser); // Debugging
+//             // Checking if the activation code matches the one in the token
+//             if (newUser.activationCode !== activationCode) {
+//                 // return next(new ErrorHandler("Invalid activation code", 400));
+//                 return res.status(400).json({
+//                     success: false,
+//                     message: "Invalid activation code",
+//                 });     
+//             }
+
+//             const { name, email, password } = newUser.user;
+//             // Checking if the user already exists in the database
+//             const userExist = await userModel.findOne({ email: newUser.user.email });
+//             if (userExist) {
+//                 return next(new ErrorHandler("User already exists", 400));
+//             }
+//             const user = await userModel.create({
+//                 name,
+//                 email,
+//                 password,
+//             });
+//             res.status(201).json({
+//                 success: true,
+//                 message: "Account activated successfully" ,
+//                 user,
+//             });
+//         } catch (error) {
+//             console.error("Error in activateAccount:", error); // Debugging
+//             res.status(500).json({ message: "Internal server error" });
+//         }
+//     }
+// );
+
+// login user
+
 export const activateAccount = catchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // Extracting activation token and activation code from the request body
             const { activationToken, activationCode }: IActivationRequest = req.body;
-            // Verifying the activation token
-            const newUser: { user: IUser; activationCode: string } = jwt.verify(
-                activationToken,
-                process.env.ACTIVATION_TOKEN_SECRET as string
-            ) as { user: IUser; activationCode: string };
 
-            // Checking if the activation code matches the one in the token
+            let newUser;
+            try {
+                newUser = jwt.verify(
+                    activationToken,
+                    process.env.ACTIVATION_TOKEN_SECRET as string
+                ) as { user: IUser; activationCode: string };
+            } catch (err: any) {
+                if (err.name === "TokenExpiredError") {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Activation token has expired. Please register again.",
+                    });
+                }
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid activation token.",
+                });
+            }
+
             if (newUser.activationCode !== activationCode) {
-                return next(new ErrorHandler("Invalid activation code", 400));
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid activation code",
+                });
             }
 
             const { name, email, password } = newUser.user;
-            // Checking if the user already exists in the database
-            const userExist = await userModel.findOne({ email: newUser.user.email });
+            const userExist = await userModel.findOne({ email });
             if (userExist) {
                 return next(new ErrorHandler("User already exists", 400));
             }
-            const user = await userModel.create({
-                name,
-                email,
-                password,
-            });
+
+            const user = await userModel.create({ name, email, password });
+
             res.status(201).json({
                 success: true,
+                message: "Account activated successfully",
+                user,
             });
-        } catch (error: any) {
-            return next(new ErrorHandler(error.message, 400));
+        } catch (error) {
+            console.error("Error in activateAccount:", error);
+            return res.status(500).json({ success: false, message: "Internal server error" });
         }
     }
 );
-
-// login user
 
 interface ILoginRequest {
     email: string;

@@ -13,7 +13,8 @@ import layoutRouter  from "./routes/layout.route"
 export const app = express();
 // cross origin resource sharing
 app.use(cors({
-    origin:process.env.ORIGIN   
+    origin:"http://localhost:3001",
+    credentials: true,
 }));
 // body parser
 app.use(express.json({limit: '50mb'}));
