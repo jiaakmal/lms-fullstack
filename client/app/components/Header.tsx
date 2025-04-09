@@ -6,22 +6,56 @@ import { ThemeSwitcher } from "../utils/TheamSwitcher";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import CustomModal from "../utils/CustomModal";
-import Login from "./Auth/Login"; 
+import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import Verification from "./Auth/Verification";
+import { useSelector } from "react-redux";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import toast from "react-hot-toast";
 
 
 type Props = {
   open: boolean;
   setOpen: (isOpen: boolean) => void;
   activeItem: number;
-  route:string;
-  setRoute : ( route:string) => void;
+  route: string;
+  setRoute: (route: string) => void;
 };
 
-const Header = ({ activeItem, open, setOpen , route , setRoute,    }: Props) => {
+const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { user } = useSelector((state: any) => state.auth);
+  const {data} = useSession();
+  const [socialAuth , {isSuccess,error}] = useSocialAuthMutation();
+
+useEffect(() => {
+  if (!user) {
+    if (data){
+    
+    socialAuth({ name:data?.user?.name, email: data?.user?.email, avatar: data?.user?.image });
+    
+  }
+}
+ if (isSuccess) {
+    setOpen(false);
+    toast.success("Login Success");
+  }
+
+  if (error) {
+    console.log("Error", error);
+    if ("data" in error) {
+      const errorData = error as any;
+      toast.error(errorData.data.message || "Something went wrong");
+    } else {
+      toast.error("Something went wrong");
+    }
+  }
+}, [data, user]);
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,15 +76,15 @@ const Header = ({ activeItem, open, setOpen , route , setRoute,    }: Props) => 
       setOpenSidebar(false);
     }
   };
+  console.log(user);
 
   return (
     <div className="w-full relative">
       <div
-        className={`${
-          active
+        className={`${active
             ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff44] border-b-[#ffffff44] dark:shadow transition duration-500"
             : "w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow "
-        }`}
+          }`}
       >
         <div className="w-[95%] md:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
@@ -71,11 +105,27 @@ const Header = ({ activeItem, open, setOpen , route , setRoute,    }: Props) => 
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              <HiOutlineUserCircle
-                size={25}
-                className=" hidden md:block cursor-pointer dark:text-white text-black"
-                onClick={() => setOpen(true)}
-              />
+              {
+                user ? (
+                  <Link href="/profile">
+                    <Image
+                      src={user?.avatar || data?.user?.image || "/assets/client-1.jpg"}
+                      alt="profile"
+                      width={30}
+                      height={30}
+                      className="rounded-full cursor-pointer"
+                    />
+
+                  </Link>
+
+                ) : (
+                  <HiOutlineUserCircle
+                    size={25}
+                    className=" hidden md:block cursor-pointer dark:text-white text-black"
+                    onClick={() => setOpen(true)}
+                  />
+                )
+              }
             </div>
           </div>
         </div>
@@ -106,44 +156,44 @@ const Header = ({ activeItem, open, setOpen , route , setRoute,    }: Props) => 
       </div>
 
       {/* login signup setup */}
-     
+
       {
         route === "Login" && (
           <>
-          {
-            open &&(
-              <CustomModal open={open} setOpen={setOpen}  setRoute={setRoute} activeItem={activeItem} component={Login}/>
-            )
+            {
+              open && (
+                <CustomModal open={open} setOpen={setOpen} setRoute={setRoute} activeItem={activeItem} component={Login} />
+              )
 
-          }
-          
-        </>
+            }
+
+          </>
         )
       }
-       {
+      {
         route === "Sign-up" && (
           <>
-          {
-            open &&(
-              <CustomModal open={open} setOpen={setOpen}  setRoute={setRoute} activeItem={activeItem} component={SignUp}/>
-            )
+            {
+              open && (
+                <CustomModal open={open} setOpen={setOpen} setRoute={setRoute} activeItem={activeItem} component={SignUp} />
+              )
 
-          }
-          
-        </>
+            }
+
+          </>
         )
       }
-       {
+      {
         route === "Verification" && (
           <>
-          {
-            open &&(
-              <CustomModal open={open} setOpen={setOpen}  setRoute={setRoute} activeItem={activeItem} component={Verification}/>
-            )
+            {
+              open && (
+                <CustomModal open={open} setOpen={setOpen} setRoute={setRoute} activeItem={activeItem} component={Verification} />
+              )
 
-          }
-          
-        </>
+            }
+
+          </>
         )
       }
     </div>

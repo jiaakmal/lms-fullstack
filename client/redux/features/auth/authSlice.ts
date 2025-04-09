@@ -22,7 +22,7 @@ export const authSlice = createSlice({
             state.token = action.payload.accessToken; // Update the token in the state with the access token
         },
         // Reducer for handling user logout
-        userLoggedOut: (state, action) => {
+        userLoggedOut: (state) => {
             state.user = "";  // Clear the user information from the state
             state.token = ""; // Clear the token from the state
         }
@@ -30,7 +30,7 @@ export const authSlice = createSlice({
 });
 
 // Export the `userRegistration` action for use in other parts of the application
-export const { userRegistration } = authSlice.actions;
+export const { userRegistration , userLoggedIn, userLoggedOut        } = authSlice.actions;
 
 // The `authSlice` object contains the reducer and actions for managing authentication 
 export default authSlice.reducer;

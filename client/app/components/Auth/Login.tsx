@@ -3,14 +3,19 @@ import React from 'react'
 import {useFormik} from "formik"
 import * as Yup from "yup"
 import{AiOutlineEye , AiOutlineEyeInvisible,AiFillGithub} from "react-icons/ai"
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState,useEffect } from 'react'
 import {FcGoogle} from "react-icons/fc"
 import {styles} from "@/app/styles/styles"
+import { useLoginMutation } from '@/redux/features/auth/authApi'
+import toast from 'react-hot-toast'
+import {signIn} from "next-auth/react"
+import { useSelector } from 'react-redux'       
 
 
 type Props = {
     setRoute: (route: string) => void;
+    setOpen: (open: boolean) => void;
 }
 
 const LoginSchema = Yup.object().shape({
@@ -19,18 +24,41 @@ const LoginSchema = Yup.object().shape({
 })
 
 
-const Login = ({setRoute}: Props) => {
-    const [show, setShow] = useState(false)
+const Login = ({setRoute,setOpen}: Props) => {
+    const [show, setShow] = useState(false);
+    const router = useRouter();
+    const [login , {isSuccess,data,isError,error}] = useLoginMutation()
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
         },
         validationSchema: LoginSchema,
-        onSubmit: async (email ,password) => {
-            console.log(email , password)
-        }
+        onSubmit: async (values) => {
+            await login(values); // values = { email: string, password: string }
+          }
+          
     });
+
+    useEffect(() => {
+        if (isSuccess && data) {
+            setOpen(false);
+            toast.success("Login successful ");
+            router.push("/profile");            
+
+          }
+        if (error) {
+            console.log("Error" , error);
+            if("data" in error){
+                const errorData = error as any;
+                toast.error(errorData.data.message || "Something went wrong");
+            }
+            else{
+                toast.error("Something went wrong");
+            }
+        }
+    
+    }, [ isSuccess, error]);
     const {errors, touched, values, handleChange, handleSubmit} = formik
   return (
     <div className='w-full'>
@@ -83,8 +111,12 @@ const Login = ({setRoute}: Props) => {
                     Or join us
                 </h5>
                 <div  className='flex items-center justify-center my-3'>
-                    <FcGoogle size={30} className="cursor-pointer mr-2"/>
-                    <AiFillGithub size={30} className="cursor-pointer ml-3" />
+                    <FcGoogle 
+                    onClick={()=>{signIn("google")}}
+                    size={30} className="cursor-pointer mr-2"/>
+                    <AiFillGithub
+                    onClick={()=>{signIn("github")}}
+                     size={30} className="cursor-pointer ml-3" />
                     
 
                 </div>

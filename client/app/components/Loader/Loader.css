@@ -1,0 +1,24 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+}
+
+.loader {
+  border: 4px solid #1494d3; /* Light blue border */
+  border-top: 4px solid #1f2937; /* Darker border for the top */
+  border-radius: 50%; /* Circular shape */
+  width: 48px; /* Width of the loader */
+  height: 48px; /* Height of the loader */
+  animation: spin 1s linear infinite; /* Spinning animation */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); /* Start at 0 degrees */
+  }
+  100% {
+    transform: rotate(360deg); /* Complete a full rotation */
+  }
+}
