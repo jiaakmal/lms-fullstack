@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+
+@theme {
+  /* Custom Breakpoints */
+  --breakpoint-400px: 400px;
+  --breakpoint-800px: 800px;
+  --breakpoint-1100px: 1100px;
+  --breakpoint-1200px: 1200px;
+  --breakpoint-1300px: 1300px;
+  --breakpoint-1500px: 1500px;
+
+  /* Custom Fonts */
+  --font-Poppins: 'Poppins', sans-serif;
+  --font-Josefin: 'Josefin Sans', sans-serif;
+
+  /* Custom Gradients */
+  --gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+/* remove cursor arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+}
+
+.hero_animation {
+  background-image: linear-gradient(
+    147.92deg,
+    hsla(239, 76%, 53%, 0.456),
+    hsla(0, 0%, 100%, 0.89)
+  );
+  animation: changeBackgroundColor 8s infinite alternate;
+}
+
+@keyframes changeBackgroundColor {
+  0%, 100% {
+    opacity: 1;
+  }
+  16.67% {
+    opacity: 0.9;
+  }
+  33.33% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  66.67% {
+    opacity: 0.5;
+  }
+  83.33% {
+    opacity: 0.4;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
