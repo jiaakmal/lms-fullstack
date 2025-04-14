@@ -1,8 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    user: "",
-    token: ""
+    user: null,
+    token: null
 }
 
 const authSlice = createSlice({
@@ -23,9 +23,9 @@ const authSlice = createSlice({
          */
         userLoggedOut: (state) => {
             // Clear the user state
-            state.user = "";
+            state.user = null;
             // Clear the token state
-            state.token = "";
+            state.token = null;
         }
     }
 })

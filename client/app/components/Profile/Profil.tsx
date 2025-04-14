@@ -6,6 +6,7 @@ import { useLogOutQuery } from '@/redux/features/auth/authApi';
 import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
+
 type Props = {
 user : any          
 };
@@ -18,11 +19,11 @@ const Profile = ({user}:Props) => {
     const { } = useLogOutQuery(undefined, {
         skip: !logout ? true : false,
     });
-  const logOutHandler = () => {
-    signOut();
-    setLogout(true);
-  
-    redirect('/');
+  const logOutHandler =async () => {
+
+   setLogout(true);
+   await signOut();
+   redirect("/");
   }
       
 
@@ -40,7 +41,7 @@ const Profile = ({user}:Props) => {
   return (
     <div className="w-[85%] flex mx-auto">
       <div
-        className={`w-[60px] 800px:w-[310px] h-[450px] dark:bg-slate-900 bg-opacity-90 border bg-white dark:border-[#ffffff1d] border-[#00000014] rounded-[5px] shadow-sm dark:shadow-sm mt-[80px] mb-[80px] sticky z-[40] ${
+        className={`w-[60px] md:w-[310px] md:h-[450px] dark:bg-slate-900 bg-opacity-90 border bg-white dark:border-[#ffffff1d] border-[#00000014] rounded-[5px] shadow-sm dark:shadow-sm mt-[80px] mb-[80px] sticky z-[40] ${
           scroll ? 'top-[12px]' : 'top-[30px]'
         } left-[30px]`}
       >
@@ -49,7 +50,7 @@ const Profile = ({user}:Props) => {
         active = {active}
         setActive = {setActive}
         avatar = {avatar}
-       logOutHandler = {logOutHandler}
+      logOutHandler = {logOutHandler}
         />
       </div>
     </div>

@@ -10,9 +10,9 @@ import SignUp from "./Auth/SignUp";
 import Verification from "./Auth/Verification";
 import { useSelector } from "react-redux";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useSocialAuthMutation , useLogOutQuery } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type Props = {
   open: boolean;
@@ -27,14 +27,37 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const user = useSelector((state: any) => state.auth);
-  const{ data}  = useSession();
-  console.log("user of state :",user);
-  console.log("data of session :" , data);
+  console.log("user data ", user)
+  const {data}  = useSession();
   const [socialAuth , {isSuccess , error}] = useSocialAuthMutation();
   const [logout , setLogout] = useState(false);
       const { } = useLogOutQuery(undefined, {
           skip: !logout ? true : false,
       });
+  useEffect(() => {
+    if(!user){
+      if(data){
+        socialAuth({
+          email:data?.user?.email,
+          name:data?.user?.name,
+          avatar:data?.user?.image,
+        })
+      }
+    }
+    if(data === null){
+      if(isSuccess){
+        toast.success("login successful")
+      }
+    }
+    if(data === null){
+      setLogout(true);
+      setRoute("Login")
+    }
+    
+  }, [data, user])
+  
+
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,38 +73,6 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  useEffect(() => {
-    if (!user) {
-      if(data){
-        socialAuth(
-          {email:data?.user?.email,
-          name:data?.user?.name,
-          avatar:data?.user?.image
-        });
-      }
-    }
-    if(data === null){
-      if(isSuccess)
-    {
-      toast.success("Logged in successfully");    
-    }
-    }
-
-    if(data === null || ""){
-      setLogout(true);
-    }
-    if (error) {
-        console.log("Error", error);
-        if ("data" in error) {
-            const errorData = error as any;
-            toast.error(errorData.data.message || "Something went wrong");
-        }
-        else {
-            toast.error("Something went wrong");
-        }
-    }
-
-}, [user,data]);
   const handleClose = (e: any) => {
     if (e.target.id === "screen") {
       setOpenSidebar(false);
@@ -116,11 +107,13 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
                   />
                 </div>
 
+                
+               
                 {
-                user ? (
+                user  && Object.keys(user).length > 0 ? (
                   <Link href="/profile">
                     <Image
-                      src={user.image ? user.image  : "/assets/client-1.jpg"}
+                      src={user?.avatar || data?.user?.image || "/assets/client-1.jpg"}
                       alt="profile"
                       width={30}
                       height={30}
@@ -133,10 +126,15 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
                   <HiOutlineUserCircle
                     size={25}
                     className=" hidden md:block cursor-pointer dark:text-white text-black"
-                    onClick={() => setOpen(true)}
+                    onClick={() => {
+                      setRoute("Login"); // or "Sign-Up" if that’s default
+                      setOpen(true);
+                    }}// Open user modal or menu
                   />
                 )
               }
+                
+              
 
               </div>
             </div>
@@ -154,14 +152,30 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
                 <NavItems activeItem={activeItem} isMobile={true} />
 
                 {/* User Icon */}
-                <HiOutlineUserCircle
-                  size={25}
-                  className="cursor-pointer ml-5 my-2 text-black dark:text-white"
-                  onClick={() => {
-                    setRoute("Login"); // or "Sign-Up" if that’s default
-                    setOpen(true);
-                  }}// Open user modal or menu
-                />
+                {
+                user ? (
+                  <Link href="/profile">
+                    <Image
+                      src={user?.avatar || data?.user?.image || "/assets/client-1.jpg"}
+                      alt="profile"
+                      width={30}
+                      height={30}
+                      className="rounded-full cursor-pointer"
+                    />
+
+                  </Link>
+
+                ) : (
+                  <HiOutlineUserCircle
+                    size={25}
+                    className=" hidden md:block cursor-pointer dark:text-white text-black"
+                    onClick={() => {
+                      setRoute("Login"); // or "Sign-Up" if that’s default
+                      setOpen(true);
+                    }}// Open user modal or menu
+                  />
+                )
+              }
                 <br />
                 <br />
                 <p className=" pl-5 px-2  text-[16px] text-black dark:text-white">Copyright 2025 E-learning</p>

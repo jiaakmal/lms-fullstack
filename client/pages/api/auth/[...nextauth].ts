@@ -2,7 +2,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-
+// optional: credentials login agar use kar rahi ho
+// import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   providers: [

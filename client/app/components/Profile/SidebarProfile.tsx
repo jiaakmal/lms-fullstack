@@ -7,16 +7,16 @@ import { SiCoursera } from 'react-icons/si';
 import { AiOutlineLogout } from 'react-icons/ai';
 
 type Props = {
-    user: any;
+    user:any;
     active: number;
     avatar: string | null;
     setActive: (active: number) => void;
     logOutHandler: any;
-
+    
 };
 
 
-const SideBarProfile = ({ active, avatar, setActive, user, logOutHandler }: Props) => {
+        const SideBarProfile = ({ active, avatar, setActive, user,logOutHandler }: Props) => {
 
     return (
         <div className="w-full">
@@ -26,13 +26,13 @@ const SideBarProfile = ({ active, avatar, setActive, user, logOutHandler }: Prop
                 onClick={() => setActive(1)}
             >
                 <Image
-                    src={user.avatar || avatar ? user.avatar || avatar : '/assets/client-1.jpg'}
+                    src={user?.avatar || avatar ? user.avatar || avatar : ''}
                     alt="user-avatar"
                     width={30}
                     height={30}
-                    className="w-[20px] h-[20px] 800px:w-[30px] 800px:h-[30px] cursor-pointer rounded-full"
+                    className="w-[20px] h-[20px] md:w-[30px] md:h-[30px] cursor-pointer rounded-full"
                 />
-                <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
+                <h5 className="pl-2 md:block hidden font-Poppins dark:text-white text-black">
                     My Account
                 </h5>
             </div>
@@ -42,7 +42,7 @@ const SideBarProfile = ({ active, avatar, setActive, user, logOutHandler }: Prop
                 onClick={() => setActive(2)}
             >
                 <RiLockPasswordLine size={20} fill="#fff" />
-                <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">Change Password</h5>
+                <h5 className="pl-2 md:block hidden font-Poppins dark:text-white text-black">Change Password</h5>
             </div>
             <div
                 className={`w-full flex items-center px-3 my-4 cursor-pointer ${active === 3 ? 'dark:bg-slate-800 bg-white' : 'bg-transparent'
@@ -55,7 +55,7 @@ const SideBarProfile = ({ active, avatar, setActive, user, logOutHandler }: Prop
             <div
                 className={`w-full flex items-center px-3 my-4 cursor-pointer ${active === 4 ? 'dark:bg-slate-800 bg-white' : 'bg-transparent'
                     }`}
-                onClick={logOutHandler()}
+                onClick={()=>logOutHandler()}
             >
                 <AiOutlineLogout size={20} fill="#fff" />
                 <h5 className="pl-2 md:block hidden font-Poppins dark:text-white text-black">Log out</h5>
