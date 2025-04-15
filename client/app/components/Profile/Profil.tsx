@@ -5,6 +5,7 @@ import SidebarProfile from './SidebarProfile'
 import { useLogOutQuery } from '@/redux/features/auth/authApi';
 import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import ProfileInfo from './ProfileInfo';
 
 
 type Props = {
@@ -21,8 +22,9 @@ const Profile = ({user}:Props) => {
     });
   const logOutHandler =async () => {
 
-   setLogout(true);
+   
    await signOut();
+   setLogout(true);
    redirect("/");
   }
       
@@ -53,6 +55,14 @@ const Profile = ({user}:Props) => {
       logOutHandler = {logOutHandler}
         />
       </div>
+      {
+         active === 1  &&
+         (
+          <div className = "w-full h-full bg-transparent mt-[80px]">
+            <ProfileInfo avatar={avatar} user={user}/>
+          </div>
+         )
+      }
     </div>
   );
 };

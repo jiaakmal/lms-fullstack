@@ -362,22 +362,15 @@ export const updateUserInfo = catchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId = req.user?._id as string;
-            const { name, email } = req.body as IUpdateUserInfo;
+            const { name } = req.body as IUpdateUserInfo;
 
             const user = await userModel.findById(userId);
 
-            if (email && user) {
-                const isEmailTaken = await userModel.findOne({ email });
-                if (isEmailTaken) {
-                    return next(new ErrorHandler("Email already exists", 400));
-                }
-
-                user.email = email;
                 if (name && user) {
                     user.name = name;
                 }
 
-                await user.save();
+                await user?.save();
 
                 await redis.set(userId, JSON.stringify(user));
 
@@ -386,11 +379,8 @@ export const updateUserInfo = catchAsyncError(
                     message: "User info updated successfully",
                     user,
                 });
-            } else {
-                console.log("Email or User Missing");
-                return next(new ErrorHandler("Invalid request", 400));
-            }
-        } catch (error: any) {
+            }        
+           catch (error: any) {
             console.error("Error in updateUserInfo:", error);
             return next(new ErrorHandler(error.message, 500));
         }
