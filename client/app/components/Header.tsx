@@ -347,7 +347,7 @@ const Header = ({ activeItem, open, setOpen, route, setRoute, }: Props) => {
   const isAuthenticated = isClient && user && Object.keys(user).length > 0;
   
   // Get avatar source safely
-  const avatarSrc = isClient ? (user?.avatar.url || session?.user?.image || defaultAvatar) : defaultAvatar;
+  const avatarSrc = isClient ? (user?.avatar?.url || session?.user?.image || defaultAvatar) : defaultAvatar;
 
   return (
     <div className="w-full relative">
