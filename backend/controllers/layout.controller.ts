@@ -3,9 +3,11 @@ import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import LayoutModel from "../models/layout.model";
+
+      // create layout file
 export const createLayout = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // create layout file
+  
 
         const {type} = req.body;
         // validate type

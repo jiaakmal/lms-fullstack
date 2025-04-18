@@ -1,10 +1,14 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 import { IUser } from "./user.model";
+
+// Comment interface
 interface IComment {
   user: IUser;
   question: string;
   questionReplies: IComment[];
 }
+
+// Review interface
 
 interface IReview {
   user: IUser;
@@ -12,6 +16,8 @@ interface IReview {
   comment: string;
   commentReplies: IComment[];
 }
+
+// Link interface
 interface ILink {
   url: string;
   title: string;

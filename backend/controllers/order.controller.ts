@@ -12,7 +12,7 @@ import NotificationModel from "../models/notification.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 
 
-
+// place order
 
 export const placeOrder = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {

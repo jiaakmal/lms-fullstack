@@ -131,51 +131,7 @@ interface IActivationRequest {
     activationCode: string;
 }
 
-// export const activateAccount = catchAsyncError(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         try {
-//             console.log("Activation Request Body:", req.body); // Debugging
-//             // Extracting activation token and activation code from the request body
-//             const { activationToken, activationCode }: IActivationRequest = req.body;
-//             // Verifying the activation token
-//             const newUser: { user: IUser; activationCode: string } = jwt.verify(
-//                 activationToken,
-//                 process.env.ACTIVATION_TOKEN_SECRET as string
-//             ) as { user: IUser; activationCode: string };
-//             console.log("Decoded Token:", newUser); // Debugging
-//             // Checking if the activation code matches the one in the token
-//             if (newUser.activationCode !== activationCode) {
-//                 // return next(new ErrorHandler("Invalid activation code", 400));
-//                 return res.status(400).json({
-//                     success: false,
-//                     message: "Invalid activation code",
-//                 });     
-//             }
-
-//             const { name, email, password } = newUser.user;
-//             // Checking if the user already exists in the database
-//             const userExist = await userModel.findOne({ email: newUser.user.email });
-//             if (userExist) {
-//                 return next(new ErrorHandler("User already exists", 400));
-//             }
-//             const user = await userModel.create({
-//                 name,
-//                 email,
-//                 password,
-//             });
-//             res.status(201).json({
-//                 success: true,
-//                 message: "Account activated successfully" ,
-//                 user,
-//             });
-//         } catch (error) {
-//             console.error("Error in activateAccount:", error); // Debugging
-//             res.status(500).json({ message: "Internal server error" });
-//         }
-//     }
-// );
-
-// login user
+ // Controller function to handle account activation
 
 export const activateAccount = catchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -228,11 +184,13 @@ export const activateAccount = catchAsyncError(
     }
 );
 
+// @desc    Login User
 interface ILoginRequest {
     email: string;
     password: string;
 }
 
+//Controller for login
 export const loginUser = catchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {

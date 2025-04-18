@@ -6,7 +6,7 @@ import userModel from "../models/user.model";
 import CourseModel from "../models/course.model";
 
 
-
+// get user analytic
 export const getUserAnalytics = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userModel.find();
