@@ -12,6 +12,7 @@ import sendMail from "../utils/sendMail";
 import sendEmail from "../utils/sendMail";
 import userModel from "../models/user.model";
 import NotificationModel from "../models/notification.model";
+import axios from "axios";
 
 // Create new course 
 
@@ -50,40 +51,42 @@ export const updateCourse = catchAsyncError(async (req: Request, res: Response, 
     try {
         const courseId = req.params.id;
         const data = req.body;
-        const newThumbnail = data.thumbnail;
+        const thumbnail = data.thumbnail;
 
         // Find the existing course
-        const course = await CourseModel.findById(courseId);
+        const course = await CourseModel.findById(courseId) as any;
         if (!course) {
             return next(new ErrorHandler("Course not found", 404));
         }
 
         // Handle thumbnail update
-        if (newThumbnail) {
-            // Validate the new thumbnail
-            if (typeof newThumbnail.url !== "string") {
-                return next(new ErrorHandler("Invalid thumbnail URL. Please provide a valid URL.", 400));
-            }
-
-            // Delete the old thumbnail from Cloudinary
+        if (thumbnail && !thumbnail.startsWith("https")) {
+            
+            // Delete the old thumbnail from Cloudinary if it exists
             if ((course.thumbnail as { public_id?: string })?.public_id) {
                 const thumbnail = course.thumbnail as { public_id: string };
                 await cloudinary.v2.uploader.destroy(thumbnail.public_id);
             }
 
             // Upload the new thumbnail to Cloudinary
-            const myCloud = await cloudinary.v2.uploader.upload(newThumbnail.url, {
+            const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
                 folder: "courses",
             });
 
-            // Update the thumbnail data
+            // Update the thumbnail data in the request body
             data.thumbnail = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
             };
         }
+        if(thumbnail.startsWith("https")){
+            data.thumbnail = {
+                public_id: course?.thumbnail.public_id,
+                url: course?.thumbnail.url,
+            };
+        }
 
-        // Update course in the database
+        // Update the course in the database
         const updatedCourse = await CourseModel.findByIdAndUpdate(
             courseId,
             { $set: data },
@@ -99,7 +102,6 @@ export const updateCourse = catchAsyncError(async (req: Request, res: Response, 
         return next(new ErrorHandler(error.message, 500));
     }
 });
-
 // get single course without purchasing
 
 export const getSingleCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
@@ -143,27 +145,15 @@ export const getSingleCourse = catchAsyncError(async (req: Request, res: Respons
 export const getAllCourses = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const isCachedExist = await redis.get("allCourses");
-
-        if (isCachedExist) {
-            console.log("hit redis", isCachedExist);
-            const courses = JSON.parse(isCachedExist);
-            return res.status(200).json({
-                success: true,
-                courses,
-            });
-        }
-        else {
+        
             const courses = await CourseModel.find().select("-courseData.videoUrl -courseData.suggestion  -courseData.links  -courseData.questions");
             console.log("hit db");
-
-            await redis.set("allCourses", JSON.stringify(courses));
 
             res.status(200).json({
                 success: true,
                 courses,
             });
-        }
+        
     } catch (error: any) {
         console.error("Error in getAllCourses:", error.message, error.stack);
         return next(new ErrorHandler(error.message, 500));
@@ -480,6 +470,28 @@ export const getAllCoursesAdmin = catchAsyncError(async (req: Request, res: Resp
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
+//Generate videoUrl
+
+export const generateVideoUrl = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const {videoId} = req.body;
+        const responce  = await axios.post(
+            `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+            {ttl : 300},
+            {
+                headers:{
+                    Accept:"application/json",
+                    "Content-Type":"application/json",
+                    Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`
+                },
+            }
+        );
+        res.json(responce.data)
+    } catch (error:any) {
+        return next(new ErrorHandler(error.message,400))
+    }
+})
 
 // delete coursse
 

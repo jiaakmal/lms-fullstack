@@ -10,7 +10,7 @@ const Page = (props: Props) => {
         <div>  
             <AdminProtected>
             <Heading  
-                title="ELearning - Admin"  
+                title="ELearning -All users- Admin"  
                 description="eLearning is a platform for students to learn and get help from teachers"  
                 keywords="Programming,MERN,Redux,Machine Learning"  
             />  

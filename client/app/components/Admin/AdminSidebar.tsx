@@ -146,25 +146,25 @@ const AdminSidebar = () => {
                         <Item title="Dashboard" to="/dashboard" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
 
                        {!isCollapsed &&( <Typography className="uppercase text-xs mt-6 mb-2 px-3 text-gray-500 dark:text-gray-400">Data</Typography>)}
-                        <Item title="Users" to="/users" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Invoices" to="/invoices" icon={<BarChartOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Users" to="/admin/users" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Invoices" to="/admin/invoices" icon={<BarChartOutlinedIcon />} selected={selected} setSelected={setSelected} />
 
                         {!isCollapsed &&( <Typography className="uppercase text-xs mt-6 mb-2 px-3 text-gray-500 dark:text-gray-400">Content</Typography>)}
                         <Item title="Create Course" to="/admin/create-course" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Live Courses" to="/live-courses" icon={<VideoCallIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Live Courses" to="/admin/all-courses" icon={<VideoCallIcon />} selected={selected} setSelected={setSelected} />
 
                         {!isCollapsed &&(  <Typography className="uppercase text-xs mt-6 mb-2 px-3 text-gray-500 dark:text-gray-400">Analytics</Typography>)}
-                        <Item title="Course Analytics" to="/courses-analytics" icon={<AssessmentIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="User Analytics" to="/user-analytics" icon={<GroupIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Order Analytics" to="/order-analytics" icon={<ShoppingCartIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Course Analytics" to="/admin/courses-analytics" icon={<AssessmentIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="User Analytics" to="/admin/user-analytics" icon={<GroupIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Order Analytics" to="/admin/order-analytics" icon={<ShoppingCartIcon />} selected={selected} setSelected={setSelected} />
 
                         {!isCollapsed &&( <Typography className="uppercase text-xs mt-6 mb-2 px-3 text-gray-500 dark:text-gray-400">Customization</Typography>)}
-                        <Item title="Hero" to="/hero" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="FAQ" to="/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Categories" to="/categories" icon={<MapOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Hero" to="/admin/hero" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="FAQ" to="/admin/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Categories" to="/admin/categories" icon={<MapOutlinedIcon />} selected={selected} setSelected={setSelected} />
 
                         {!isCollapsed &&( <Typography className="uppercase text-xs mt-6 mb-2 px-3 text-gray-500 dark:text-gray-400">Extra</Typography>)}
-                        <Item title="Settings" to="/settings" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Settings" to="/admin/settings" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
 
                         {!isCollapsed && (
                             <MenuItem

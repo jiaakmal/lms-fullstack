@@ -12,7 +12,7 @@ const page = (props: Props) => {
   return (
     <div>
         <Heading
-        title="ELearning - Admin" 
+        title="ELearning -Create new course- Admin" 
         description="It is a platform for students to learn and share knowledge."
         keywords="mern , learning , jawaria , web development, frontend , backend "
         />

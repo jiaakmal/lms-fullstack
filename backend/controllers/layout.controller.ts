@@ -21,12 +21,15 @@ export const createLayout = catchAsyncError(async (req: Request, res: Response, 
                 folder: "layout",
             })
             const banner  = {
-            image:{
-                public_id:myCloud.public_id,
-                url:myCloud.secure_url,
-            },
-            title,
-            subTitle,
+                type:"Banner",
+                banner:{
+                image:{
+                    public_id:myCloud.public_id,
+                    url:myCloud.secure_url,
+                 },
+                title,
+                subTitle,
+                }
         }
         
             await LayoutModel.create(banner)

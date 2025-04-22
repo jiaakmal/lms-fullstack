@@ -17,9 +17,6 @@ const CourseInformation = ({
   const [dragging, setDragging] = useState(false);
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    alert("Form submitted!");
-    console.log("Submit fired ✅");
-    console.log("Current step:", active);
     setActive(active + 1);
   };
   const handleFileChange = (e: any) => {
@@ -161,7 +158,7 @@ const CourseInformation = ({
             <input
               id="level"
               name=""
-              type="number"
+              type="text"
               required
               value={courseInfo.level}
               onChange={(e) =>
