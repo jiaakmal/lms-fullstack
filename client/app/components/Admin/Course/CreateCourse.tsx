@@ -31,6 +31,7 @@ const CreateCourse = (props: Props) => {
   const [courseInfo, setCourseInfo] = useState({
     name: "",
     description: "",
+    categories: "", 
     price: "",
     estimatedPrice: "",
     tags: "",
@@ -38,6 +39,9 @@ const CreateCourse = (props: Props) => {
     demoUrl: "",
     thumbnail: "",
   });
+  console.log(courseInfo);
+
+  
 
   const [benefits, setBenefits] = useState<{ title: string }[]>([{
     title: "",
@@ -51,6 +55,7 @@ const CreateCourse = (props: Props) => {
       videoUrl: "",
       title: "",
       description: "",
+      videoLength: "",
       videoSection: "Untitled Section",
       links: [
         {
@@ -73,6 +78,7 @@ const CreateCourse = (props: Props) => {
       videoUrl: courseContent.videoUrl,
       title: courseContent.title,
       description: courseContent.description,
+      videoLength: courseContent.videoLength,
       videoSection: courseContent.videoSection,
       links: courseContent.links.map((link) => ({ title: link.title, url: link.url })),
       suggestion: courseContent.suggestion,
@@ -82,6 +88,7 @@ const CreateCourse = (props: Props) => {
     const data = {
       name: courseInfo.name,
       description: courseInfo.description,
+      categories: courseInfo.categories,
       price: courseInfo.price,
       estimatedPrice:courseInfo.estimatedPrice,
       tags: courseInfo.tags,
@@ -96,6 +103,9 @@ const CreateCourse = (props: Props) => {
     setCourseData(data)
    
   };
+  console.log(courseData
+
+  )
   const handleCourseCreate =async (e:any) => {
     const data = courseData;
     if(!isLoading){

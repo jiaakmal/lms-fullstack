@@ -72,28 +72,33 @@ export const editLayout = catchAsyncError(async (req: Request, res: Response, ne
         // create layout file
 
         const {type} = req.body;
-        if(type === 'Banner'){
-            const bannerData : any = await LayoutModel.findOne({type:"Banner"});
-             const {image,title,subTitle} = req.body;
-             if(bannerData){
-             await cloudinary.v2.uploader.destroy(bannerData.image.public_id);
-            }
-            const myCloud =  await cloudinary.v2.uploader.upload(image, {
+        if (type === 'Banner') {
+            const bannerData: any = await LayoutModel.findOne({ type: "Banner" });
+            const { image, title, subTitle } = req.body;
+          
+            let imageData = bannerData.banner.image; // default: keep existing image
+          
+            if (image && typeof image === "string" && image.startsWith("data:image")) {
+              // if new image uploaded (base64)
+              const uploaded = await cloudinary.v2.uploader.upload(image, {
                 folder: "layout",
-            })
-            
-            const banner  = {
-            type:"Banner",
-            image:{
-                public_id:myCloud.public_id,
-                url:myCloud.secure_url,
-            },
-            title,
-            subTitle,
-        }
-        
-            await LayoutModel.findByIdAndUpdate(bannerData?._id,{banner})
-        }
+              });
+              imageData = {
+                public_id: uploaded.public_id,
+                url: uploaded.secure_url,
+              };
+            }
+          
+            const banner = {
+              type: "Banner",
+              image: imageData,
+              title,
+              subTitle,
+            };
+          
+            await LayoutModel.findByIdAndUpdate(bannerData?._id, { banner });
+          }
+          
        if(type === "FAQ"){
            const {faq} = req.body;
            const FaqItem = await LayoutModel.findOne({type:"FAQ"});
@@ -136,7 +141,7 @@ export const editLayout = catchAsyncError(async (req: Request, res: Response, ne
 
 export const getLayoutByType = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {type} = req.body;
+        const {type} = req.query;;
         const layout = await LayoutModel.findOne({type});
         if(!layout){
             return next(new ErrorHandler("Layout not found", 404));

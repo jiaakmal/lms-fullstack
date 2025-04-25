@@ -2,9 +2,8 @@
 import React from 'react'
 import AdminSidebar from '@/app/components/Admin/AdminSidebar'
 import Heading from '@/app/utils/Heading'
-import Faq from '../../components/Admin/Customization/Faq'
 import DashboardHeader from '@/app/components/Admin/DashboardHeader'
-import EditFAQ from '../../components/Admin/Customization/Faq'
+import OrderAnalytics  from '@/app/components/Admin/Analytics/OrderAnalytics'
 
 
 type Props = {}
@@ -14,7 +13,7 @@ const page = ({params}:any) => {
   return (
     <div>
         <Heading
-        title="ELearning -Faq- Admin" 
+        title="ELearning -EditCourse- Admin" 
         description="It is a platform for students to learn and share knowledge."
         keywords="mern , learning , jawaria , web development, frontend , backend "
         />
@@ -24,7 +23,7 @@ const page = ({params}:any) => {
             </div>
             <div className="w-[85%]">
                 <DashboardHeader/>
-                <EditFAQ />
+                <OrderAnalytics/>
             </div>
         </div>
             

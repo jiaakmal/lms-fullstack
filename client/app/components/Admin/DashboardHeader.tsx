@@ -5,7 +5,7 @@ import { Popover, IconButton, Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { ThemeSwitcher } from '../../utils/TheameSwitcher';
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ setOpen }: { open?: boolean, setOpen?: any }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
